@@ -1,54 +1,50 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Arithmetic { // 숫자만 찾기
+public class Arithmetic { // 숫자 찾기
 
     private static final String BLANK = " ";
-    private static final String STRING_SPLIT = "";
 
-    private final List<Integer> numbers;
+    private final List<Long> numbers;
 
-    public Arithmetic(String string, List<String> symbols) {
-        this.numbers = validate(string, symbols);
+    public Arithmetic(String formula, List<String> operators) {
+        this.numbers = validate(formula, operators);
     }
 
-    private List<Integer> validate(String string, List<String> symbols) {
-        String tempString = validateBlank(string);
-        String[] strings = split(tempString);
-        List<String> tempNumbers = findNumber(strings, symbols);
+    private List<Long> validate(String formula, List<String> operators) {
+        String tempFormula = validateBlank(formula);
+        String[] tempFormulas = divideUserFormula(tempFormula);
+        List<String> tempNumbers = findNumber(tempFormulas, operators);
         return validateToInt(tempNumbers);
     }
 
-    private String validateBlank(String string) {
-        if (string == null || string.equals(BLANK)) {
-            throw new NullPointerException("입력한 값이 공백입니다.");
+    private String validateBlank(String formula) {
+        if (formula.equals(BLANK)) {
+            throw new IllegalArgumentException("입력한 값이 공백입니다.");
         }
-        return string;
+        return formula;
     }
 
-    private String[] split(String string) {
-        return string.split(STRING_SPLIT);
+    private String[] divideUserFormula(String formula) {
+        return formula.split(BLANK);
     }
 
-    private List<String> findNumber(String[] strings, List<String> symbols) {
-        List<String> tempNumbers = new ArrayList<>();
-        for (int i = 0; i < strings.length; i++) {
-            findSameSymbol(i, symbols, tempNumbers, strings);
+    private List<String> findNumber(String[] formulas, List<String> operators) {
+        List<String> numbers = new ArrayList<>();
+        for (String formula : formulas) {
+            if (!operators.contains(formula)) {
+                numbers.add(formula);
+            }
         }
-        return tempNumbers;
+        return numbers;
     }
 
-    private void findSameSymbol(int initialValue, List<String> symbol, List<String> tempNumbers, String[] strings) {
-        if (!symbol.contains(strings[initialValue])) {
-            tempNumbers.add(strings[initialValue]);
-        }
-    }
-
-    private List<Integer> validateToInt(List<String> tempNumbers) {
-        List<Integer> numbers = new ArrayList<>();
+    private List<Long> validateToInt(List<String> tempNumbers) {
+        List<Long> numbers = new ArrayList<>();
         for (String tempNumber : tempNumbers) {
             try {
-                numbers.add(Integer.parseInt(tempNumber));
+                numbers.add(Long.parseLong(tempNumber));
             } catch (NumberFormatException msg) {
                 throw new NumberFormatException("올바른 숫자가 입력되지 않아 형변환 하지 못하였습니다.");
             }
@@ -56,7 +52,7 @@ public class Arithmetic { // 숫자만 찾기
         return numbers;
     }
 
-    public List<Integer> getNumbers() {
+    public List<Long> getNumbers() {
         return numbers;
     }
 

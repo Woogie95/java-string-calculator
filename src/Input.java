@@ -2,9 +2,11 @@ import java.util.Scanner;
 
 public class Input {
 
-    public static String input() {
+    private static final Scanner SCANNER = new Scanner(System.in);
+
+    public static String inputUserNumber() {
         System.out.println("계산할 식을 입력해주세요.");
-        return new Scanner(System.in).next();
+        return SCANNER.nextLine();
     }
 
 }
